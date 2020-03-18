@@ -1,0 +1,30 @@
+> ## Allow a square invertible matrix's inverse to save calculation time
+> ## to the original matrix and a cached inverse of the matrix
+> 
+> makeCacheMatrix <- function(x = matrix()) {
++     cached_inverse <- NULL
++     
++     get <- function() x
++     setinverse <- function(inverse) cached_inverse <<- inverse
++     getinverse <- function() cached_inverse
++     list( get = get, setinverse = setinverse, getinverse = getinverse)
++     
++ }
+> 
+> 
+> ## Given a matrix created by makeCacheMatrix, return the inverse of the original
+> ## matrix, using a cache if TRUE. If NULL, compute the inverse cache
+> 
+> cacheSolve <- function(x, ...) {
++     inverse <- x$getinverse()
++     if (!is.null(inverse)) {
++         message("retrieving inverse from cache")
++         return(inverse)
++     }
++     
++     original <- x$get()
++     inverse <- solve(original)
++     x$setinverse(inverse)
++     inverse
++ }
+> makeCacheMatrix <- function(x = matrix()) {
